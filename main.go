@@ -175,21 +175,24 @@ func displayCurrentWeather(data *CurrentWeatherResponse) {
 	fmt.Printf("  Sunset: %s\n", time.Unix(data.Sys.Sunset, 0).Local().Format("15:04"))
 	fmt.Println("------------------------------------")
 }
-
+// displayForecast prints the 5-day / 3-hour forecast details.
 func displayForecast(data *ForecastResponse) {
 	fmt.Printf("5-Day / 3-Hour Forecast for %s, %s:\n", data.City.Name, data.City.Country)
 	fmt.Println("------------------------------------")
 
+	// Group forecast entries by day
 	dailyForecasts := make(map[string][]ForecastListEntry)
 	for _, entry := range data.List {
 		date := time.Unix(entry.Dt, 0).Local().Format("2006-01-02 (Mon)")
 		dailyForecasts[date] = append(dailyForecasts[date], entry)
 	}
 
+	// Sort dates for consistent output
 	var dates []string
 	for date := range dailyForecasts {
 		dates = append(dates, date)
 	}
+	// Simple bubble sort for demonstration, for larger sets use sort.Strings
 	for i := 0; i < len(dates)-1; i++ {
 		for j := i + 1; j < len(dates); j++ {
 			if dates[i] > dates[j] {
@@ -202,12 +205,25 @@ func displayForecast(data *ForecastResponse) {
 		fmt.Printf("\nDate: %s\n", date)
 		for _, entry := range dailyForecasts[date] {
 			forecastTime := time.Unix(entry.Dt, 0).Local().Format("15:04")
+
+			// --- FIX STARTS HERE ---
+			var mainWeather, descWeather string
+			if len(entry.Weather) > 0 {
+				mainWeather = entry.Weather[0].Main
+				descWeather = entry.Weather[0].Description
+			} else {
+				// Provide default values if weather array is empty
+				mainWeather = "N/A"
+				descWeather = "No specific conditions"
+			}
+			// --- FIX ENDS HERE ---
+
 			fmt.Printf("  %s: Temp: %.1f°C, Feels: %.1f°C, Cond: %s (%s), Wind: %.1f m/s, Pop: %.0f%%\n",
 				forecastTime,
 				entry.Main.Temp,
 				entry.Main.FeelsLike,
-				entry.Weather[0].Main,
-				entry.Weather[0].Description,
+				mainWeather,       // Use the checked variable
+				descWeather,       // Use the checked variable
 				entry.Wind.Speed,
 				entry.Pop*100,
 			)
