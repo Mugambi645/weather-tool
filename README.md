@@ -81,7 +81,7 @@ Run the tool from your terminal.
 To get the current weather for a city:
 
 ```bash
-go run main.go --city "London"
+go run main.go --city "Meru"
 ```
 
 ### Fetch 5-Day Forecast
@@ -89,7 +89,7 @@ go run main.go --city "London"
 To get the 5-day / 3-hour forecast for a city:
 
 ```bash
-go run main.go --city "Paris" --forecast
+go run main.go --city "Nairobi" --forecast
 ```
 
 ### Cities with Spaces
@@ -97,7 +97,7 @@ go run main.go --city "Paris" --forecast
 For cities with spaces in their names, enclose the city name in quotes:
 
 ```bash
-go run main.go --city "New York" --forecast
+go run main.go --city "Mombasa" --forecast
 ```
 
 ## Environment Variables
